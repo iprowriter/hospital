@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import data from "../data/mock_data.json";
-import { Button } from "@mui/material";
+import { Button, TablePagination } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -35,6 +35,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 export default function DisplayLists() {
+  
+  //a function for table pagination
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
   const patients = data;
   console.log(patients);
 
@@ -50,7 +65,7 @@ export default function DisplayLists() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {patients.map((patient) => (
+          {patients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((patient) => (
             <StyledTableRow key={patient.patient_id}>
               <StyledTableCell component="th" scope="row">
                 {patient.patient_id}
@@ -68,6 +83,15 @@ export default function DisplayLists() {
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={patients.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </TableContainer>
   );
 }
