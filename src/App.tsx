@@ -14,7 +14,6 @@ function App() {
     <Container maxWidth="lg">
         <Box sx={{ bgcolor: "#f5f5f5"}}>
           <Search/>
-        <DisplayLists/>
         </Box>
       </Container>
     
